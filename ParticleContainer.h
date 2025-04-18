@@ -11,6 +11,7 @@ class ParticleContainer
 
 public:
     virtual ~ParticleContainer() = 0;
+    std::vector<Particle>& vec();
 };
 
 

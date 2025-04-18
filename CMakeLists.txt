@@ -29,8 +29,17 @@ include_directories(${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends)
 
 find_package(OpenGL REQUIRED)
 
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/particle.frag FRAG_STR)
+
+file(READ ${CMAKE_CURRENT_SOURCE_DIR}/particle.vert VERT_STR)
+
+set(SHADER_SOURCE_CPP "const char* P_FRAG_STR = R\"(${FRAG_STR})\";
+const char* P_VERT_STR = R\"(${VERT_STR})\";")
+
+file(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/shaders.h "${SHADER_SOURCE_CPP}")
+
 add_executable(
         FluidSim main.cpp Particle.cpp render.cpp simulation.cpp ParticleContainer.cpp HashContainer.cpp
-        GraphContainer.cpp ${IMGUI}
+        GraphContainer.cpp ${IMGUI} gl.c
 )
 target_link_libraries(FluidSim PRIVATE glfw OpenGL::GL)

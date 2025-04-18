@@ -77,11 +77,17 @@ int main()
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
+    // Setup our particle rendering with OpenGL
+    GLRenderInfo render_info = init_render();
+
     // State
     bool show_demo_window = true;
     bool show_another_window = false;
     float timestep;
     HashContainer particles;
+    particles.vec().emplace_back(0.0, 0.5, 1.0);
+    particles.vec().emplace_back(-0.5, -0.5, 1.0);
+    particles.vec().emplace_back(0.5, -0.5, 1.0);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -111,15 +117,20 @@ int main()
         }
 
         // Show simulation space
-        if (show_another_window)
         {
             ImGui::Begin("Simulation", &show_another_window);
 
             // Draw simulation in child window
             ImGui::BeginChild("SimRender");
+            ImVec2 pos = ImGui::GetCursorScreenPos();
             ImVec2 window_size = ImGui::GetWindowSize();
-            //unsigned int texture = render_particles(std::vector<Particle>());
-            //ImGui::Image((ImTextureID)texture, window_size, ImVec2(0, 1), ImVec2(1, 0));
+            unsigned int texture = render_particles(particles.vec(), render_info, window_size.x, window_size.y);
+            ImGui::GetWindowDrawList()->AddImage(
+                    (ImTextureID)texture,
+                    pos,
+                    ImVec2(pos.x+window_size.x, pos.y+window_size.y),
+                    ImVec2(0, 1),
+                    ImVec2(1, 0));
             ImGui::EndChild();
 
             ImGui::End();
