@@ -13,6 +13,7 @@ struct Particle
 
     /// Makes a particle at specified position at rest
     Particle(float px, float py, float pz) : px(px), py(py), pz(pz) {}
+    int hash(float grid_size);
 };
 
 #endif

@@ -81,9 +81,8 @@ int main()
     GLRenderInfo render_info = init_render();
 
     // State
-    bool show_demo_window = true;
-    bool show_another_window = false;
-    float timestep;
+    float timestep = 0.0001;
+    float smoothing_radius = 0.05f;
     HashContainer particles;
     particles.vec().emplace_back(0.0, 0.5, 1.0);
     particles.vec().emplace_back(-0.5, -0.5, 1.0);
@@ -118,7 +117,7 @@ int main()
 
         // Show simulation space
         {
-            ImGui::Begin("Simulation", &show_another_window);
+            ImGui::Begin("Simulation");
 
             // Draw simulation in child window
             ImGui::BeginChild("SimRender");
