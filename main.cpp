@@ -81,12 +81,11 @@ int main()
     GLRenderInfo render_info = init_render();
 
     // State
-    float timestep = 0.0001;
-    float smoothing_radius = 0.05f;
-    HashContainer particles;
-    particles.vec().emplace_back(0.0, 0.5, 1.0);
-    particles.vec().emplace_back(-0.5, -0.5, 1.0);
-    particles.vec().emplace_back(0.5, -0.5, 1.0);
+    Simulation sim;
+
+    sim.get_particles().insert(Particle(0.0, 0.5, 1.0));
+    sim.get_particles().insert(Particle(-0.5, -0.5, 1.0));
+    sim.get_particles().insert(Particle(0.5, -0.5, 1.0));
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -112,6 +111,12 @@ int main()
         {
             ImGui::Begin("Config");
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+            ImGui::SliderFloat("Smoothing Radius", &sim.smoothing_radius, 0.0, 1.0);
+            ImGui::InputFloat("Timestep", &sim.timestep);
+            ImGui::InputFloat("Gas Constant", &sim.gas_constant);
+            ImGui::InputFloat("Gravity", &sim.gravity);
+            ImGui::InputFloat("Target Density", &sim.target_density);
+            ImGui::SliderFloat("Viscosity", &sim.viscosity, 0.0, 1.0);
             ImGui::End();
         }
 
@@ -123,7 +128,7 @@ int main()
             ImGui::BeginChild("SimRender");
             ImVec2 pos = ImGui::GetCursorScreenPos();
             ImVec2 window_size = ImGui::GetWindowSize();
-            unsigned int texture = render_particles(particles.vec(), render_info, window_size.x, window_size.y);
+            unsigned int texture = render_particles(sim.get_particles().vec(), render_info, window_size.x, window_size.y);
             ImGui::GetWindowDrawList()->AddImage(
                     (ImTextureID)texture,
                     pos,
@@ -136,7 +141,7 @@ int main()
         }
 
         // Perform a physics update on the particles
-        phys_update(particles, timestep);
+        sim.phys_update();
 
         // Rendering
         ImGui::Render();

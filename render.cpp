@@ -31,6 +31,8 @@ unsigned render_particles(const std::vector<Particle>& particles, GLRenderInfo i
     glDrawBuffers(1, draw_buffers);
     glBindFramebuffer(GL_FRAMEBUFFER, info.tex);
     glViewport(0, 0, width, height);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
     glDrawArrays(GL_POINTS, 0, particles.size());
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
