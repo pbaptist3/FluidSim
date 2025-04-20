@@ -5,9 +5,10 @@
 #include <array>
 #include "particle.h"
 #include "ParticleContainer.h"
+#include "HashContainer.h"
 
 class Simulation {
-    ParticleContainer particles;
+    HashContainer particles;
 
     /// Calculate the kernel between two particles
     float kernel(const Particle& p1, const Particle& p2);
@@ -26,7 +27,7 @@ public:
     };
 
     Simulation() : smoothing_radius(0.15), timestep(0.005), gravity(1.0), gas_constant(0.1), viscosity(0.0),
-        target_density(400.0), mass(1.0), spawn_pattern(Pattern::Grid), paused(false), particle_count(1000) {}
+        target_density(400.0), mass(1.0), spawn_pattern(Pattern::Grid), paused(true), particle_count(1000) {}
 
     /// Perform a physics update on all particles
     void phys_update();

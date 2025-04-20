@@ -10,7 +10,7 @@
 /// 6. apply velocity
 void Simulation::phys_update()
 {
-    particles.update();
+    particles.update(smoothing_radius);
     std::vector<Particle> out(particles.vec());
 
     for (int i=0; i<out.size(); i++)

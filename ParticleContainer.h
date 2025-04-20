@@ -28,7 +28,7 @@ public:
     std::vector<Particle>& vec();
     virtual void insert(Particle p);
     virtual ParticleContainer::Iterator nearest(int i, float r);
-    virtual void update() {}
+    virtual void update(float r) {}
 };
 
 

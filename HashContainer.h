@@ -13,13 +13,23 @@ class HashContainer : public ParticleContainer
     std::vector<int> buckets;
 
 public:
-    ~HashContainer() {};
+    class Iterator {
+        int i;
+        int offset;
+        float radius;
+        HashContainer& c;
+        Particle& p;
+        Iterator(HashContainer& c, Particle& p, float r);
+    public:
+        virtual Iterator& operator++();
+        Particle& operator*();
+        bool done();
+        friend HashContainer;
+        int idx();
+    };
 
-    /// Recompute all particles' hashes
-    void rehash();
-
-    /// Insert a single particle into the container
-    void insert(Particle p);
+    /// Rehashes all particles
+    void update(float r);
 };
 
 
