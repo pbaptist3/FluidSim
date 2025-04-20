@@ -7,6 +7,8 @@
 #include "simulation.h"
 #include "HashContainer.h"
 #include "GraphContainer.h"
+#include "SimulationSettings.h"
+#include "simulation_extensions.h"
 
 #define IMGUI_ENABLE_FREETYPE
 
@@ -83,7 +85,10 @@ int main()
     // State
     bool show_demo_window = true;
     bool show_another_window = false;
-    float timestep;
+
+    // Simulation settings struct
+    SimulationSettings settings;
+
     HashContainer particles;
     particles.vec().emplace_back(0.0, 0.5, 1.0);
     particles.vec().emplace_back(-0.5, -0.5, 1.0);
@@ -113,6 +118,23 @@ int main()
         {
             ImGui::Begin("Config");
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
+            ImGui::SliderFloat("Timestep", &settings.timestep, 0.001f, 0.1f);
+            ImGui::SliderFloat("Gravity", &settings.gravity, 0.0f, 20.0f);
+            ImGui::SliderFloat("Viscosity", &settings.viscosity, 0.0f, 2.0f);
+
+            if (ImGui::Button(settings.paused ? "Resume" : "Pause")) {
+                settings.paused = !settings.paused;
+            }
+
+            ImGui::SameLine();
+            if (ImGui::Button("Reset")) {
+                particles.vec().clear();
+                particles.vec().emplace_back(0.0, 0.5, 1.0);
+                particles.vec().emplace_back(-0.5, -0.5, 1.0);
+                particles.vec().emplace_back(0.5, -0.5, 1.0);
+            }
+
             ImGui::End();
         }
 
@@ -136,9 +158,10 @@ int main()
             ImGui::End();
         }
 
-        // Perform a physics update on the particles
-        phys_update(particles, timestep);
-
+        // Perform a physics update on the particles using physics wrapper
+    if (!settings.paused) {
+        apply_extended_physics(particles, settings);
+    }
         // Rendering
         ImGui::Render();
         int display_w, display_h;

@@ -41,5 +41,7 @@ file(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/shaders.h "${SHADER_SOURCE_CPP}")
 add_executable(
         FluidSim main.cpp Particle.cpp render.cpp simulation.cpp ParticleContainer.cpp HashContainer.cpp
         GraphContainer.cpp ${IMGUI} gl.c
+        SimulationSettings.h
+        Simulation_Extensions.h
 )
 target_link_libraries(FluidSim PRIVATE glfw OpenGL::GL)
