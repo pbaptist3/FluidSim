@@ -85,6 +85,7 @@ int main()
     // State
     bool show_demo_window = true;
     bool show_another_window = false;
+    bool show_grid = false;
 
     // Simulation settings struct
     SimulationSettings settings;
@@ -123,6 +124,13 @@ int main()
             ImGui::SliderFloat("Gravity", &settings.gravity, 0.0f, 20.0f);
             ImGui::SliderFloat("Viscosity", &settings.viscosity, 0.0f, 2.0f);
 
+            // Particle pattern dropdown
+            const char* patterns[] = { "Grid", "Circle", "Random" };
+            int current_pattern = static_cast<int>(settings.spawn_pattern);
+            if (ImGui::Combo("Spawn Pattern", &current_pattern, patterns, IM_ARRAYSIZE(patterns))) {
+                settings.spawn_pattern = static_cast<SimulationSettings::Pattern>(current_pattern);
+            }
+
             if (ImGui::Button(settings.paused ? "Resume" : "Pause")) {
                 settings.paused = !settings.paused;
             }
@@ -130,10 +138,51 @@ int main()
             ImGui::SameLine();
             if (ImGui::Button("Reset")) {
                 particles.vec().clear();
-                particles.vec().emplace_back(0.0, 0.5, 1.0);
-                particles.vec().emplace_back(-0.5, -0.5, 1.0);
-                particles.vec().emplace_back(0.5, -0.5, 1.0);
+
+                float r = settings.particle_radius;
+                int count = settings.particle_count;
+
+                switch (settings.spawn_pattern) {
+                    case SimulationSettings::Pattern::Grid: {
+                        int grid_dim = static_cast<int>(std::sqrt(count));
+                        float spacing = r * 2.5f;
+
+                        for (int i = 0; i < grid_dim; ++i) {
+                            for (int j = 0; j < grid_dim && particles.vec().size() < count; ++j) {
+                                float x = (i - grid_dim / 2) * spacing;
+                                float y = (j - grid_dim / 2) * spacing;
+                                particles.vec().emplace_back(x, y, 1.0f);
+                            }
+                        }
+                        break;
+                    }
+
+                    case SimulationSettings::Pattern::Circle: {
+                        float angle_step = 2 * 3.14159f / count;
+                        float radius = r * count * 0.1f;
+
+                        for (int i = 0; i < count; ++i) {
+                            float angle = i * angle_step;
+                            float x = std::cos(angle) * radius;
+                            float y = std::sin(angle) * radius;
+                            particles.vec().emplace_back(x, y, 1.0f);
+                        }
+                        break;
+                    }
+
+                    case SimulationSettings::Pattern::Random: {
+                        for (int i = 0; i < count; ++i) {
+                            float x = ((rand() % 2000) / 1000.0f - 1.0f) * 0.8f;
+                            float y = ((rand() % 2000) / 1000.0f - 1.0f) * 0.8f;
+                            particles.vec().emplace_back(x, y, 1.0f);
+                        }
+                        break;
+                    }
+                }
             }
+
+
+            ImGui::Checkbox("Show Grid Overlay", &show_grid);
 
             ImGui::End();
         }
@@ -153,6 +202,31 @@ int main()
                     ImVec2(pos.x+window_size.x, pos.y+window_size.y),
                     ImVec2(0, 1),
                     ImVec2(1, 0));
+
+            // Grid Overlay Display for subdivision
+            if (show_grid) {
+                int num_cols = 20;
+                int num_rows = 20;
+
+                ImU32 grid_color = IM_COL32(255, 255, 255, 40); // light white, semi-transparent
+
+                float cell_width  = window_size.x / num_cols;
+                float cell_height = window_size.y / num_rows;
+
+                ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+                // Draw vertical grid lines
+                for (int i = 0; i <= num_cols; ++i) {
+                    float x = pos.x + i * cell_width;
+                    draw_list->AddLine(ImVec2(x, pos.y), ImVec2(x, pos.y + window_size.y), grid_color);
+                }
+
+                // Draw horizontal grid lines
+                for (int j = 0; j <= num_rows; ++j) {
+                    float y = pos.y + j * cell_height;
+                    draw_list->AddLine(ImVec2(pos.x, y), ImVec2(pos.x + window_size.x, y), grid_color);
+                }
+            }
             ImGui::EndChild();
 
             ImGui::End();

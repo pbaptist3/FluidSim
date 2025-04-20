@@ -7,6 +7,7 @@
 // ABC for a generic particle container
 class ParticleContainer
 {
+    protected:
     std::vector<Particle> particles;
 
 public:
