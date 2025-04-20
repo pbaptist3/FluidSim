@@ -6,16 +6,44 @@
 #include "particle.h"
 #include "ParticleContainer.h"
 
-/// Calculate gradient of a scalar field
-std::vector<std::array<float, 3>> calculate_gradient(const std::vector<float>& field);
+class Simulation {
+    ParticleContainer particles;
 
-/// Calculate laplacian of a vector field
-std::vector<float> calculate_laplacian(const std::vector<std::array<float, 3>> field);
+    /// Calculate the kernel between two particles
+    float kernel(const Particle& p1, const Particle& p2);
 
-/// Calculate desnity of particles using neighbors
-std::vector<float> calculate_density(const ParticleContainer &particles, float radius);
+    /// Calculate gradient of the kernel between two particles
+    std::pair<float, float> kernel_gradient(const Particle& p1, const Particle& p2);
 
-/// Perform a physics update on all particles
-void phys_update(const ParticleContainer &particles, float dt);
+    /// Calculate laplacian of the kernel between two particles
+    float kernel_laplacian(const Particle& p1, const Particle& p2);
+
+public:
+    enum class Pattern {
+        Grid,
+        Circle,
+        Random
+    };
+
+    Simulation() : smoothing_radius(0.15), timestep(0.005), gravity(1.0), gas_constant(0.1), viscosity(0.0),
+        target_density(400.0), mass(1.0), spawn_pattern(Pattern::Grid), paused(false), particle_count(1000) {}
+
+    /// Perform a physics update on all particles
+    void phys_update();
+
+    ParticleContainer& get_particles();
+
+    // These fields are public so the imgui sliders can access them more easily
+    float smoothing_radius;
+    float timestep;
+    float gravity;
+    float gas_constant;
+    float viscosity;
+    float target_density;
+    float mass;
+    Pattern spawn_pattern;
+    bool paused;
+    int particle_count;
+};
 
 #endif

@@ -16,7 +16,7 @@ struct Particle
     : px(px), py(py), pz(pz), vx(0.0f), vy(0.0f), vz(0.0f) {}
 
     //Hash function for grid size
-    int hash(float grid_size);
+    int hash(float grid_size) const;
 };
 
 #endif

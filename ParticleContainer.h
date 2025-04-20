@@ -4,15 +4,31 @@
 #include <vector>
 #include "Particle.h"
 
-// ABC for a generic particle container
+// A generic particle container
 class ParticleContainer
 {
     protected:
     std::vector<Particle> particles;
 
 public:
-    virtual ~ParticleContainer() = 0;
+    class Iterator {
+        int i;
+        float radius;
+        ParticleContainer& c;
+        Particle& p;
+        Iterator(ParticleContainer& c, Particle& p, float r) : i(0), c(c), p(p), radius(r) {}
+    public:
+        virtual Iterator& operator++();
+        Particle& operator*();
+        bool done();
+        friend ParticleContainer;
+        int idx();
+    };
+
     std::vector<Particle>& vec();
+    virtual void insert(Particle p);
+    virtual ParticleContainer::Iterator nearest(int i, float r);
+    virtual void update() {}
 };
 
 
