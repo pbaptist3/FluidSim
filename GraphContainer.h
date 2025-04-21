@@ -8,7 +8,7 @@
 #include <cmath>
 #include <functional>
 
-// ✅ Custom hash for tuple<int, int>
+// Custom hash for tuple<int, int>
 namespace std {
     template <>
     struct hash<std::tuple<int, int>> {
