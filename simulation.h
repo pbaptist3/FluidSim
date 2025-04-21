@@ -8,7 +8,7 @@
 #include "HashContainer.h"
 
 class Simulation {
-    HashContainer particles;
+    ParticleContainer particles;
 
     /// Calculate the kernel between two particles
     float kernel(const Particle& p1, const Particle& p2);
@@ -26,8 +26,8 @@ public:
         Random
     };
 
-    Simulation() : smoothing_radius(0.15), timestep(0.005), gravity(1.0), gas_constant(0.1), viscosity(0.0),
-        target_density(400.0), mass(1.0), spawn_pattern(Pattern::Grid), paused(true), particle_count(1000) {}
+    Simulation() : smoothing_radius(0.15), timestep(0.005), gravity(1.0), gas_constant(0.02), viscosity(0.0),
+        target_density(6000.0), mass(1.0), spawn_pattern(Pattern::Grid), paused(true), particle_count(1000) {}
 
     /// Perform a physics update on all particles
     void phys_update();

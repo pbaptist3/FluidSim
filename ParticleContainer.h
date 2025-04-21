@@ -16,7 +16,7 @@ public:
         float radius;
         ParticleContainer& c;
         Particle& p;
-        Iterator(ParticleContainer& c, Particle& p, float r) : i(0), c(c), p(p), radius(r) {}
+        Iterator(ParticleContainer& c, Particle& p, float r);
     public:
         virtual Iterator& operator++();
         Particle& operator*();

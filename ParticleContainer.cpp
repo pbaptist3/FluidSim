@@ -44,3 +44,14 @@ int ParticleContainer::Iterator::idx()
 {
     return i;
 }
+
+ParticleContainer::Iterator::Iterator(ParticleContainer& c, Particle& p, float r) : i(-1), c(c), p(p), radius(r) {
+    while (i < (int)c.vec().size())
+    {
+        ++i;
+        float dx = c.vec()[i].px - p.px;
+        float dy = c.vec()[i].py - p.py;
+        if ((dx*dx+dy*dy)<(radius*radius))
+            break;
+    }
+}

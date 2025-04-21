@@ -51,7 +51,7 @@ void Simulation::phys_update()
         // give a nudge away from floor
         if (p_out.py < -0.98)
         {
-            p_out.vy += 2 * gravity * timestep;
+            //p_out.vy += 2 * gravity * timestep;
         }
     }
 
@@ -86,7 +86,7 @@ void Simulation::phys_update()
             force.first += componentless * gradient.first;
             force.second += componentless * gradient.second;
 
-            componentless = viscosity / 100000.0 * 0.5 * kernel_laplacian(p1, *p2);
+            componentless = viscosity / 1000000.0 * 0.5 * kernel_laplacian(p1, *p2);
             force.first += ((*p2).vx - p1.vx) * componentless;
             force.second += ((*p2).vy - p1.vy) * componentless;
         }
@@ -97,7 +97,6 @@ void Simulation::phys_update()
     }
 
     particles.vec() = out;
-    //particles.update();
 }
 
 ParticleContainer &Simulation::get_particles()

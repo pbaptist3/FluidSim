@@ -1,3 +1,4 @@
+#include <cmath>
 #include <iostream>
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -6,7 +7,7 @@
 #include "render.h"
 #include "simulation.h"
 #include "HashContainer.h"
-#include "GraphContainer.h"
+#include "BinaryPartitionContainer.h"
 #include "SimulationSettings.h"
 #include "simulation_extensions.h"
 
