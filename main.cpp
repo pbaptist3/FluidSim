@@ -82,8 +82,12 @@ int main()
     // Setup our particle rendering with OpenGL
     GLRenderInfo render_info = init_render();
 
-    // State
+    // Grid Overlay toggle
     bool show_grid = false;
+
+    // Particle debug toggle
+    bool show_debug_panel = false;
+
 
     // Simulation settings struct
     Simulation sim;
@@ -181,6 +185,8 @@ int main()
 
             ImGui::Checkbox("Show Grid Overlay", &show_grid);
 
+            ImGui::Checkbox("Show Debug Panel", &show_debug_panel);
+
             ImGui::End();
         }
 
@@ -224,6 +230,22 @@ int main()
                 }
             }
             ImGui::EndChild();
+
+            ImGui::End();
+        }
+
+        // Debug Tools Panel
+        if (show_debug_panel) {
+            ImGui::Begin("Debug Tools");
+
+            const auto& particle_vec = sim.get_particles().vec();
+            ImGui::Text("Total Particles: %zu", particle_vec.size());
+
+            if (!particle_vec.empty()) {
+                const auto& p = particle_vec[0];
+                ImGui::Text("P[0] Position: (%.3f, %.3f)", p.px, p.py);
+                ImGui::Text("P[0] Velocity: (%.3f, %.3f)", p.vx, p.vy);
+            }
 
             ImGui::End();
         }
