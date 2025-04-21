@@ -6,9 +6,10 @@
 #include "particle.h"
 #include "ParticleContainer.h"
 #include "HashContainer.h"
+#include "BinaryPartitionContainer.h"
 
 class Simulation {
-    ParticleContainer particles;
+    BinaryPartitionContainer particles;
 
     /// Calculate the kernel between two particles
     float kernel(const Particle& p1, const Particle& p2);
