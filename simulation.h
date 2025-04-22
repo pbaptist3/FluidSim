@@ -9,7 +9,7 @@
 #include "BinaryPartitionContainer.h"
 
 class Simulation {
-    BinaryPartitionContainer particles;
+    HashContainer particles;
 
     /// Calculate the kernel between two particles
     float kernel(const Particle& p1, const Particle& p2);
