@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.23)
 project(FluidSim)
 
 set(CMAKE_CXX_STANDARD 14)
+SET(CMAKE_CXX_FLAGS "-O3 -mavx2 -mbmi2")
 
 include(FetchContent)
 FetchContent_Declare(
@@ -41,7 +42,5 @@ file(WRITE ${CMAKE_CURRENT_SOURCE_DIR}/shaders.h "${SHADER_SOURCE_CPP}")
 add_executable(
         FluidSim main.cpp Particle.cpp render.cpp simulation.cpp ParticleContainer.cpp HashContainer.cpp
         BinaryPartitionContainer.cpp ${IMGUI} gl.c
-        SimulationSettings.h
-        Simulation_Extensions.h
 )
 target_link_libraries(FluidSim PRIVATE glfw OpenGL::GL)
