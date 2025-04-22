@@ -160,14 +160,22 @@ int main()
                     }
 
                     case Simulation::Pattern::Circle: {
-                        float angle_step = 2 * 3.14159f / count;
-                        float radius = r * count * 0.1f;
+                        float max_radius = 0.8f; // normalized to viewport [-1, 1]
+                        float spacing = sim.smoothing_radius * 1.1f;
+                        int count = sim.particle_count;
 
-                        for (int i = 0; i < count; ++i) {
-                            float angle = i * angle_step;
-                            float x = std::cos(angle) * radius;
-                            float y = std::sin(angle) * radius;
-                            sim.get_particles().vec().emplace_back(x, y, 1.0f);
+                        int placed = 0;
+                        for (float r = 0.0f; r <= max_radius && placed < count; r += spacing) {
+                            float circumference = 2.0f * 3.1415926f * r;
+                            int particles_in_ring = std::max(6, static_cast<int>(circumference / spacing));
+
+                            for (int j = 0; j < particles_in_ring && placed < count; ++j) {
+                                float angle = 2.0f * 3.1415926f * j / particles_in_ring;
+                                float x = std::cos(angle) * r;
+                                float y = std::sin(angle) * r;
+                                sim.get_particles().vec().emplace_back(x, y, 1.0f);
+                                placed++;
+                            }
                         }
                         break;
                     }
