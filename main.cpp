@@ -8,8 +8,6 @@
 #include "simulation.h"
 #include "HashContainer.h"
 #include "BinaryPartitionContainer.h"
-#include "SimulationSettings.h"
-#include "simulation_extensions.h"
 
 #define IMGUI_ENABLE_FREETYPE
 
