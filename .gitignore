@@ -38,3 +38,6 @@ Makefile
 *.exe
 *.out
 *.app
+
+# Local convenience scripts
+run.sh
