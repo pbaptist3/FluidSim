@@ -2,7 +2,13 @@ cmake_minimum_required(VERSION 3.23)
 project(FluidSim)
 
 set(CMAKE_CXX_STANDARD 14)
-SET(CMAKE_CXX_FLAGS "-O3 -mavx2 -mbmi2")
+
+# Set compiler flags based on architecture
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
+    SET(CMAKE_CXX_FLAGS "-O3")
+else()
+    SET(CMAKE_CXX_FLAGS "-O3 -mavx2 -mbmi2")
+endif()
 
 include(FetchContent)
 FetchContent_Declare(
@@ -26,7 +32,7 @@ file(GLOB IMGUI
         ${imgui_SOURCE_DIR}/misc/cpp/imgui_stdlib.cpp
         )
 
-include_directories(${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends)
+include_directories(${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends ${CMAKE_CURRENT_SOURCE_DIR})
 
 find_package(OpenGL REQUIRED)
 

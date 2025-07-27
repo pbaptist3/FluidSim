@@ -1,2 +1,40 @@
+# Build directories
+/build/
 /cmake-build-debug/
+/cmake-build-release/
+
+# IDE files
 /.idea/
+.vscode/
+
+# Generated files
+/shaders.h
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+
+# Compiled object files
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+
+# Executables
+*.exe
+*.out
+*.app
